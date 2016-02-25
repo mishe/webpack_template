@@ -1,10 +1,9 @@
-
 var webpack = require("webpack"),
     dev_server = require("webpack-dev-server"),
     ExtractTextPlugin = require("extract-text-webpack-plugin"),
     args = process.argv,
     debug = args.indexOf("--debug") > -1,
-    build_realse = args.indexOf("--release") > -1,
+    build_realse = args.indexOf("--build-release") > -1,
     pkg = require("./package.json"),
     logConfig = {
         hash: true,
@@ -25,8 +24,7 @@ var webpack = require("webpack"),
 
     _config = {
         entry:{
-            app:['./js/main.js'],
-            vendor: ["./js/libs/jquery-2.1.4.min", "./js/libs/underscore", './js/libs/backbone',"./js/libs/touch","./js/libs/weixin"]
+            app:['./js/main.js']
         },
         output: {
             path: __dirname + "/dist/" ,
@@ -35,21 +33,20 @@ var webpack = require("webpack"),
         module: {
             loaders: [
                 {
-                test: /\.html$/,
-                loader: "html-clean!html-loader?minimize=false"
-            },
-            {
-                test: /\.css$/,
-                loader: ExtractTextPlugin.extract("style-loader", "css-loader")
-            },
-            {
-                test: /\.(png|jpg|svg|gif|eot|woff|ttf)$/,
-                loader: 'file-loader?name=[path]/images/[hash:8].[ext]'
-            }]
+                    test: /\.html$/,
+                    loader: "html-clean!html-loader?minimize=false"
+                },
+                {
+                    test: /\.css$/,
+                    loader: ExtractTextPlugin.extract("style-loader", "css-loader")
+                },
+                {
+                    test: /\.(png|jpg|svg|gif|eot|woff|ttf)$/,
+                    loader: 'file-loader?name=[path]/[hash:8].[ext]'
+                }]
         }
         , plugins: [
-            new ExtractTextPlugin("bundle" + (build_realse ? ".min.css" : ".css")),
-            new webpack.optimize.CommonsChunkPlugin("vendor", "vendor.js")
+            new ExtractTextPlugin(pkg.version+"/bundle" + (build_realse ? ".min.css" : ".css"))
         ]
     },
     compiler, server;
@@ -79,4 +76,3 @@ if (debug) {
         console.log(status.toJson(logConfig));
     });
 }
-
