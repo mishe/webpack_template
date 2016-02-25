@@ -1,15 +1,15 @@
 {
-  "name": "webDemo",
-  "version": "0.3.8",
-  "description": "",
+  "name": "freshFE-H5",
+  "version": "0.1.0",
+  "description": "两鲜移动端重构项目",
   "main": "index.js",
   "scripts": {
     "dev": "node build.js --debug",
     "debug": "node build.js --build-debug",
     "release": "node build.js --build-release"
   },
-  "author": "",
-  "license": "MIT",
+  "author": "caihua.chen",
+  "license": "ISC",
   "devDependencies": {
     "css-loader": "^0.15.6",
     "extract-text-webpack-plugin": "^0.8.2",
