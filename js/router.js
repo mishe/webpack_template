@@ -18,7 +18,8 @@ module.exports=Backbone.Router.extend({
     },
     //before route
     _beforeRoute:function(curRouter){
-        if(st.loadDate) st.loadDate.destory();
+        //if(st.loadDate) st.loadDate.destory();
+
         oldRouter=curRouter;
         if(!ref){
             $body.append('<div class="change_page_loading" id="changePageAnimate"><div class="page_loading"></div></div>');
@@ -28,12 +29,17 @@ module.exports=Backbone.Router.extend({
     },
 
     routes:{
-        '':                             'home',
+        'index.html':                             'home',
+        'st/*':                             'st',
     },
 
     home:function(){
         clearPageData();
         var Index=require('../src/index/index');
         new Index({el:$content});
+    },
+    st:function(){
+        alert('st');
     }
+
 });

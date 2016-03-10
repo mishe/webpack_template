@@ -52,7 +52,7 @@ var webpack = require("webpack"),
     compiler, server;
 
 if (debug) {
-    _config.devtool= 'cheap-module-eval-source-map';
+    _config.devtool= 'source-map';
     _config.entry.app.push('webpack/hot/dev-server');
     _config.plugins.push(new webpack.HotModuleReplacementPlugin());
 } else if (build_realse) {

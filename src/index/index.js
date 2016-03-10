@@ -3,13 +3,16 @@ module.exports=Backbone.View.extend({
         this.render();
     },
     render:function(){
-        this.$el.html('hello tester');
+        this.$el.html('<span>sssss</span>');
         this._initEvent();
         return this;
     },
     _initEvent:function(){
     },
     events:{
-
+        'tap span':'changePage'
+    },
+    changePage:function(){
+        router.navigate('st', {trigger:true,replace:false});
     }
 });
