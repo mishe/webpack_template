@@ -60,6 +60,13 @@ if(debug){
     _config.entry.app.push('webpack/hot/dev-server');
     _config.entry.app.push('webpack-dev-server/client?http://localhost:8088');
     _config.plugins.push(new webpack.HotModuleReplacementPlugin());
+    _config.plugins.push(
+        new HtmlWebpackPlugin({
+            filename: 'index.html',
+            template: 'index.html',
+            inject: true
+        })
+    );
 }else if(build_test) {
     _config.output.publicPath='https://statictest.91yaowang.com/yaowang/dist/';
     _config.plugins.push(new webpack.optimize.UglifyJsPlugin());
