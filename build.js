@@ -4,9 +4,8 @@ var webpack = require("webpack"),
     args = process.argv,
     debug = args.indexOf("--debug") > -1,
     build_realse = args.indexOf("--prd") > -1,
-    build_test = args.indexOf("--test") > -1,
     pkg = require("./package.json"),
-    ChunkManifestPlugin = require('chunk-manifest-webpack-plugin'),
+    HtmlWebpackPlugin=require('html-webpack-plugin'),
     logConfig = {
         hash: true,
         version: false,
@@ -31,8 +30,8 @@ var webpack = require("webpack"),
         output: {
 
             path: __dirname + "/dist/",
-            filename: "bundle_" + pkg.version + (build_realse ? ".min.js" : ".js"),
-            chunkFilename:'chunk_[name]'+build_realse ?'/[chunkhash:4]':''+'.js'
+            filename: "bundle_" +(debug ?'': pkg.version) + (!debug ? ".min.js" : ".js"),
+            chunkFilename:'chunk_[name]'+(build_realse ?'/[chunkhash:4]':'')+'.js'
         },
         module: {
             loaders: [
@@ -50,7 +49,7 @@ var webpack = require("webpack"),
                 }]
         }
         , plugins: [
-            new ExtractTextPlugin("bundle_" + pkg.version + (!debug ? ".min.css" : ".css"))
+            new ExtractTextPlugin("bundle_" +(debug ?'': pkg.version) + (!debug ? ".min.css" : ".css"))
         ]
     },
     compiler, server;
@@ -58,7 +57,7 @@ var webpack = require("webpack"),
 if(debug){
     _config.devtool= 'cheap-module-source-map';
     _config.entry.app.push('webpack/hot/dev-server');
-    _config.entry.app.push('webpack-dev-server/client?http://localhost:8088');
+    _config.entry.app.push('webpack-dev-server/client?http://localhost:8080');
     _config.plugins.push(new webpack.HotModuleReplacementPlugin());
     _config.plugins.push(
         new HtmlWebpackPlugin({
@@ -67,17 +66,9 @@ if(debug){
             inject: true
         })
     );
-}else if(build_test) {
-    _config.output.publicPath='https://statictest.91yaowang.com/yaowang/dist/';
-    _config.plugins.push(new webpack.optimize.UglifyJsPlugin());
-}else if(build_realse) {
+}else{
     _config.output.publicPath='https://file.91yaowang.com/yaowang/dist/';
     _config.plugins.push(new webpack.optimize.UglifyJsPlugin());
-    _config.plugins.push(new ChunkManifestPlugin({
-            filename: "manifest.json",
-            manifestVariable: "webpackManifest"
-        })
-    )
 }
 
 compiler = webpack(_config);
@@ -86,9 +77,10 @@ if (debug) {
     server = new dev_server(compiler, {
         hot: true,
         inline:true,
+        disableHostCheck: true,
         stats: { colors: true }
     });
-    server.listen(8088);
+    server.listen(8080);
 } else {
     compiler.run(function (err, status) {
         if (err) {
